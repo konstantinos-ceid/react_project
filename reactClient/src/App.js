@@ -1,32 +1,51 @@
-
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import './App.css';
-
+import React, {useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import { useState} from "react";
 import Axios from "axios";
 
-function App() {
+var x ;
+
+ function  App() 
   
+ {
+ 
+  
+  const [id, setId] = useState(0);
   const [last_name, setLast] = useState("");
   const [first_name, setFirst] = useState("");
-  const [is_active, setActive] = useState(true);
-  const [date_of_birth, setDate] = useState("2021-12-12");
+  const [is_active, setActive] = useState("");
+  const [date_of_birth, setDate] = useState("");
   
+      
+
 
   const [newLast, setNewLast] = useState("");
   const [newFirst, setNewFirst] = useState("");
-  const [newActive, setNewActive] = useState(true);
-  const [newDate, setNewDate] = useState(2012-12-12);
+  const [newActive, setNewActive] = useState("");
+  const [newDate, setNewDate] = useState("");
   
-const [employeeList, setEmployeeList] = useState([]);
+ 
+
+  const [employeeList, setEmployeeList] = useState([]);
+
+  const history = useHistory();
+  const handleOnClick = useCallback(() => history.push('/update'), [history]);
+  
+
+  
 
   
   const addEmployee = () => {
     Axios.post("http://localhost:3001/create", {
+      
+      
       last_name: last_name,
       first_name: first_name,
       is_active: is_active,
       date_of_birth : date_of_birth,
-
+       
     }).then(() => {
       console.log("success");
     });
@@ -34,6 +53,7 @@ const [employeeList, setEmployeeList] = useState([]);
   const getEmployees = () => {
     Axios.get("http://localhost:3001/users").then((response) =>{
     console.log("success");
+    
     setEmployeeList(response.data);
       
     });
@@ -41,29 +61,18 @@ const [employeeList, setEmployeeList] = useState([]);
   
 
 
-  const updateEmployee = (id) => {
-    Axios.put("http://localhost:3001/update", { 
-    last_name : newLast, 
-    first_name : newFirst, 
-    is_active :newActive,
-    date_of_birth : newDate, id: id }).then(
-      (response) => {
-        setEmployeeList(
-          employeeList.map((val) => {
-            return val.id === id
-              ? {
-                  id: val.id,
-                  last_name : newLast, 
-                  first_name : newFirst, 
-                  is_active : newActive,
-                  date_of_birth : newDate,
-                }
-              : val;
-          })
-        );
-      }
-    );
-  };
+  const getId = (id) =>{
+    x = id;
+localStorage.setItem("key", x);
+
+  }
+
+  
+
+  
+   
+   
+
   
   
   const deleteEmployee = (id) =>{
@@ -76,76 +85,61 @@ const [employeeList, setEmployeeList] = useState([]);
         );
       });
   };
-
+  
 
   return (
 
 
 
 
-    <div className="information">
-      <label>First Name:</label>
-      <input type="text"
-      onChange={(event) => {
-        setFirst(event.target.value);
-      }}/>
-      <label>Last Name:</label>
-      <input type="text"
-      onChange={(event) => {
-        setLast(event.target.value);
-      }}/>
-      <label>Is Active?:</label>
-      <input type = "boolean"
-      onChange={(event) => {
-        setActive(event.target.value);
-      }}/>
-      <label>Date of Birth:</label>
-      <input type="date"
-      onChange={(event) => {
-        setDate(event.target.value);
-      }}/>
-      <button onClick={addEmployee}>Add Employee</button>
-      <button onClick={getEmployees}>Get All Employees</button>
-
+    <div className="info">
+      
+{getEmployees()}
 {employeeList.map((val, key) =>{
 return (
-<div className="employee">
+<div className="employe">
   <div>
-  <h3>{val.last_name}</h3>
-  <h3>{val.first_name}</h3>
-  <h3>{val.is_active}</h3>
-  <h3>{val.date_of_birth}</h3>
-</div>
-  <div>
-    
-    <input type="text" 
-    placeholder="First Name"
-    onChange={(event) => {
-      setNewFirst(event.target.value);
-    }}/>
-    <input type="text" 
-    placeholder="Last Name"
-    onChange={(event) => {
-      setNewLast(event.target.value);
-    }}/>
-    <input type="boolean" 
-    placeholder="Is Active?"
-    onChange={(event) => {
-      setNewActive(event.target.value);
-    }}/>
-    <input type="text" 
-    placeholder="Date of Birth"
-    onChange={(event) => {
-      setNewDate(event.target.value);
-    }}/>
-  <button onClick={() => {
-                    updateEmployee(val.id);
+  <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Active</th>
+                    <th>Date of Birth</th>
+                    <button onClick={() => {
+                 getId(val.id);
+                 
+                 console.log(date_of_birth);
+                 console.log(is_active);
+                   handleOnClick();
+
                   }}> Update</button>
                   <button onClick={() => {deleteEmployee(val.id)}}>
 
                     Delete
                   </button>
-  </div>
+                </tr>
+                </thead>
+                <tbody>
+                    
+                       
+                            <tr key={val.id}>
+                              <td>{val.id}</td>
+                              <td>{val.first_name}</td>
+                                <td>{val.last_name}</td>
+                                <td>{val.is_active}</td>
+                                <td>{val.date_of_birth}</td>
+                                <td/>
+                            </tr>
+                        
+                    
+                </tbody>
+            </table>
+    
+  
+</div>
+  
 </div>
 
     
@@ -158,3 +152,4 @@ return (
 }
 
 export default App;
+

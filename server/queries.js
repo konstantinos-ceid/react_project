@@ -14,7 +14,7 @@ const pool = new Pool({
   port: 5432,
 })
 const getUsers = (request, response) => {
-  pool.query('SELECT * FROM Employee ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM pro ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -22,10 +22,11 @@ const getUsers = (request, response) => {
   })
 }
 
+
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM Employee WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM pro WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -39,7 +40,7 @@ const createUser = (request, response) => {
   const is_active = request.body.is_active;
   const date_of_birth = request.body.date_of_birth;
 
-  pool.query('INSERT INTO Employee (last_name, first_name, is_active, date_of_birth) VALUES ($1, $2, $3, $4)', [last_name, first_name, is_active, date_of_birth], (error, results) => {
+  pool.query('INSERT INTO pro (last_name, first_name, is_active, date_of_birth) VALUES ($1, $2, $3, $4)', [last_name, first_name, is_active, date_of_birth], (error, results) => {
     if (error) {
       throw error
     }
@@ -55,7 +56,7 @@ const updateUser = (request, response) => {
   const date_of_birth = request.body.date_of_birth;
 
   pool.query(
-    'UPDATE   Employee SET last_name = $1, first_name = $2, is_active = $3, date_of_birth= $4 WHERE id = $5',
+    'UPDATE  pro SET last_name = $1, first_name = $2, is_active = $3, date_of_birth= $4 WHERE id = $5',
     [last_name, first_name, is_active, date_of_birth, id],
     (error, results) => {
       if (error) {
@@ -69,7 +70,7 @@ const updateUser = (request, response) => {
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM Employee WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM pro WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
